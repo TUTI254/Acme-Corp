@@ -30,5 +30,13 @@
 
 
 # Use Case diagram
-![image info](./../assets/usecase-diagram.png)
+![Use Case diagram](./../assets/usecase-diagram.png)
 
+# State Transition Chart
+![State Transition Chart](./../assets/state-transition-chart.png)
+
+### instance 1
+The diagram shows the different states that a ticket can have during its lifecycle, as well as the possible transitions between them. A ticket starts in the "OPEN" state when it is first created, and can move to "IN PROGRESS" when an agent starts working on it. If the agent cannot proceed due to some reason, the ticket can be marked as "BLOCKED". When the agent finds a solution, the ticket can be marked as "RESOLVED". If the customer is not satisfied with the solution provided and re-opens the ticket, it goes back to the "RE-OPENED" state. Finally, when the customer is satisfied, the ticket can be marked as "CLOSED".
+
+### instance 2
+The diagram shows the possible transitions between ticket statuses. The initial state is "OPEN" and the final state is "CLOSED". "IN PROGRESS" is the state when an agent is working on the ticket. "BLOCKED" is the state when an agent is waiting for more information from the customer or from other sources. "RESOLVED" is the state when the agent has found a solution for the customer's request. "RE-OPENED" is the state when the customer is not satisfied with the solution provided by the agent and wants to re-open the ticket. A ticket can be closed by either the agent or the customer when the issue has been satisfactorily addressed.
