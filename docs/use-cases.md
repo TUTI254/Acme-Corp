@@ -26,6 +26,9 @@
 * View metrics such as average handle time, first contact resolution rate, and customer satisfaction score
 * Re-assign tickets to different agents or teams if necessary
 * Generate reports on the performance of the customer care center
-* View historical trends and patterns in customer requests and agent performance
+* View historical trends and patterns in customer requests and agent performance.
 
+
+# Use Case diagram
+![image info](./../assets/usecase-diagram.png)
 
