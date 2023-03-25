@@ -40,3 +40,14 @@ The diagram shows the different states that a ticket can have during its lifecyc
 
 ### instance 2
 The diagram shows the possible transitions between ticket statuses. The initial state is "OPEN" and the final state is "CLOSED". "IN PROGRESS" is the state when an agent is working on the ticket. "BLOCKED" is the state when an agent is waiting for more information from the customer or from other sources. "RESOLVED" is the state when the agent has found a solution for the customer's request. "RE-OPENED" is the state when the customer is not satisfied with the solution provided by the agent and wants to re-open the ticket. A ticket can be closed by either the agent or the customer when the issue has been satisfactorily addressed.
+
+# UI Designs & Wireframes
+
+## Customer UI
+![Customer UI](./../assets/customer-ui.png)
+
+## Agent UI
+![Agent UI](./../assets/agent-ui.png)
+
+## Admin UI
+![Admin UI](./../assets/admin-ui.png)
