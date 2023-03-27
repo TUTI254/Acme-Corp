@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:acme_corp/pages/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'pages/main_page.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      title: 'Acme Corp',
+      home: MainPage(),
     );
   }
 }
