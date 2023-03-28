@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MyTextfield extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final controller;
   final String? hintText;
   final bool? obscureText;
 
-  const MyTextfield(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      required this.obscureText})
-      : super(key: key);
+  const MyTextfield({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    required this.obscureText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
