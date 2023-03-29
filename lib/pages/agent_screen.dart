@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'view_customers.dart';
+import 'view_tickets.dart';
 
 class AgentPage extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
@@ -61,7 +62,7 @@ class AgentPage extends StatelessWidget {
                   indent: 100,
                   endIndent: 100,
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 35),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -109,31 +110,41 @@ class AgentPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.book,
-                                    size: 30,
-                                    color: Colors.greenAccent,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '# Tickets',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'LiberationMono',
-                                      color: Colors.grey,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ViewTickets()),
+                                );
+                              },
+                              child: Container(
+                                width: 150,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.book,
+                                      size: 30,
+                                      color: Colors.greenAccent,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(height: 10),
+                                    Text(
+                                      '# Tickets',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'LiberationMono',
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

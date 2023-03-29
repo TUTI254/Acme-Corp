@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'create_ticket_page.dart';
-import 'view_tickets.dart';
 
-// ignore: must_be_immutable
-class CustomerPage extends StatelessWidget {
-  final user = FirebaseAuth.instance.currentUser!;
-  CustomerPage({
-    Key? key,
-  }) : super(key: key);
+class ViewTickets extends StatefulWidget {
+  const ViewTickets({Key? key}) : super(key: key);
+
+  @override
+  State<ViewTickets> createState() => _ViewTicketsState();
+}
+
+class _ViewTicketsState extends State<ViewTickets> {
   List<String> docId = []; // document id list
 
   // get docId from firestore
@@ -33,27 +32,31 @@ class CustomerPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 80),
+                const SizedBox(height: 180),
+
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    const SizedBox(width: 30),
                     IconButton(
+                      // onpressed navigate to login page
                       onPressed: () {
-                        FirebaseAuth.instance.signOut();
+                        Navigator.pop(context);
                       },
-                      icon: const Icon(Icons.logout),
+                      icon: const Icon(Icons.arrow_circle_left_outlined,
+                          size: 40),
+                    ),
+                    const SizedBox(width: 50),
+                    const Text(
+                      'Tickets #',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'LiberationMono',
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
-                Text(
-                  'Hello Customer ${user.email!}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'LiberationMono',
-                  ),
-                ),
+
                 const Divider(
                   color: Colors.grey,
                   height: 20,
@@ -61,7 +64,9 @@ class CustomerPage extends StatelessWidget {
                   indent: 100,
                   endIndent: 100,
                 ),
-                const SizedBox(height: 20),
+
+                const SizedBox(height: 50),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -89,14 +94,10 @@ class CustomerPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Divider(
-                  color: Colors.grey,
-                  height: 10,
-                  thickness: 1.0,
-                  indent: 100,
-                  endIndent: 100,
-                ),
+
                 const SizedBox(height: 25),
+
+                //Email Textfield
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -160,4 +161,125 @@ class CustomerPage extends StatelessWidget {
     );
   }
 }
-// child: Text('Hello $name, welcome to the customer page.'),
+
+class GetTickets extends StatelessWidget {
+  final String documentId;
+  const GetTickets({super.key, required this.documentId});
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference tickets =
+        FirebaseFirestore.instance.collection('tickets');
+    return FutureBuilder<DocumentSnapshot>(
+        future: tickets.doc(documentId).get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "${data['number']}" "  ${data['name']}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'LiberationMono',
+                  ),
+                ),
+                Text(
+                  " status: ${data['status']}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'LiberationMono',
+                    color: data['status'] == "open"
+                        ? Colors.greenAccent
+                        : Colors.redAccent.shade200,
+                  ),
+                ),
+              ],
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.greenAccent,
+            ),
+          );
+        });
+  }
+}
+
+class GetTicketDetails extends StatelessWidget {
+  final String documentId;
+  const GetTicketDetails({super.key, required this.documentId});
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference tickets =
+        FirebaseFirestore.instance.collection('tickets');
+    return FutureBuilder<DocumentSnapshot>(
+        future: tickets.doc(documentId).get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return SizedBox(
+              height: 300,
+              width: 300,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "Ticket Number: ${data['number']}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  Text(
+                    "Ticket Category: ${data['category']}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  Text(
+                    "Ticket Name: ${data['name']}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  Text(
+                    "Ticket Description: ${data['description']}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  Text(
+                    " Ticket Status: ${data['status']}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'LiberationMono',
+                      color: data['status'] == "open"
+                          ? Colors.greenAccent
+                          : Colors.redAccent.shade200,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.greenAccent,
+            ),
+          );
+        });
+  }
+}
