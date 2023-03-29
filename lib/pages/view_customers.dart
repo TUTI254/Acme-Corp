@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'create_customer_page.dart';
 
@@ -11,8 +10,6 @@ class ViewCustomers extends StatefulWidget {
 }
 
 class _ViewCustomersState extends State<ViewCustomers> {
-  final user = FirebaseAuth.instance.currentUser!;
-
   //document id
   List<String> docId = [];
 
@@ -120,12 +117,34 @@ class _ViewCustomersState extends State<ViewCustomers> {
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: ListTile(
-                                      title: GetCustomerDetails(
-                                          documentId: docId[index]),
-                                      tileColor: Colors.grey[200],
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                  "Ticket Details",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'LiberationMono',
+                                                  ),
+                                                ),
+                                                content: GetCustomerDetails(
+                                                    documentId: docId[index]),
+                                              );
+                                            });
+                                      },
+                                      child: ListTile(
+                                        title: GetCustomers(
+                                            documentId: docId[index]),
+                                        tileColor: Colors.grey[200],
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
                                     ),
                                   );
@@ -145,6 +164,39 @@ class _ViewCustomersState extends State<ViewCustomers> {
   }
 }
 
+class GetCustomers extends StatelessWidget {
+  final String documentId;
+  const GetCustomers({super.key, required this.documentId});
+
+  @override
+  Widget build(BuildContext context) {
+    // get user collection
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    return FutureBuilder<DocumentSnapshot>(
+        future: users.doc(documentId).get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Text(
+              " # ${data['name']}",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'LiberationMono',
+              ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.greenAccent,
+            ),
+          );
+        });
+  }
+}
+
 class GetCustomerDetails extends StatelessWidget {
   final String documentId;
   const GetCustomerDetails({super.key, required this.documentId});
@@ -160,9 +212,57 @@ class GetCustomerDetails extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
-            return Text(" # ${data['name']}");
+            return SizedBox(
+              height: 300,
+              width: 350,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    "Name: ${data['name']}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Email: ${data['email']}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Phone: ${data['phone']}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Password: ${data['password']}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'LiberationMono',
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
-          return const Text("loading");
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.greenAccent,
+            ),
+          );
         });
   }
 }
